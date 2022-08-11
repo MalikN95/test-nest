@@ -1,8 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateProductDto } from './dto/create-product.dto';
-import { Repository } from 'typeorm';
+import { Between, LessThan, LessThanOrEqual, MoreThan, Repository } from 'typeorm';
 import { Product } from './entities/products.entity';
+
 
 
 @Injectable()
@@ -13,8 +14,17 @@ export class ProductsService {
         private productRepository: Repository<Product>,
     ) {}
 
-    async getAll() : Promise<Product[]> {
-        return await this.productRepository.find()
+    
+
+    async getAll(minPrice: number, maxPrice: number) : Promise<Product[]> {
+        return await this.productRepository.find({
+            where: {
+                price: Between(minPrice, maxPrice)
+            },
+            order: {
+                price: 'DESC'
+            }
+        });
     }
 
     async getById(id: number): Promise<Product> {

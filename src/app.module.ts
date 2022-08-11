@@ -1,25 +1,26 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { Product } from './products/entities/products.entity'
 import { ProductsModule } from './products/products.module';
 
+
 @Module({
   imports: [
+    ConfigModule.forRoot(),
     TypeOrmModule.forRoot({
       type: 'postgres',
-      host: 'localhost',
-      port: 5432,
-      username: 'postgres',
-      password: 'malikN',
-      database: 'nest-test',
+      host: process.env.DB_HOST,
+      port: parseInt(process.env.DB_USER_PORT) || 5432,
+      username: process.env.DB_USER_NAME,
+      password: process.env.DB_USER_PASSWORD,
+      database: process.env.DB_NAME,
       entities: [Product],
       synchronize: true,
     }), 
     ProductsModule
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [],
+  providers: [],
 })
 export class AppModule {}

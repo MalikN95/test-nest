@@ -3,6 +3,10 @@ import { CreateProductDto } from './dto/create-product.dto';
 import { ProductsService } from './products.service';
 import { Product } from './entities/products.entity';
 
+
+const minPrice: number = 3900
+const maxPrice: number = 9600
+
 @Controller('products')
 export class ProductsController {
 
@@ -12,7 +16,7 @@ export class ProductsController {
 
     @Get()
     getAll() {
-        return this.productService.getAll()
+        return this.productService.getAll(minPrice, maxPrice)
     }
 
     @Get(':id')
